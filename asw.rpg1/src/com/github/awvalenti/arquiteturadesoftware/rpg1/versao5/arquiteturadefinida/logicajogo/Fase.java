@@ -22,7 +22,7 @@ public class Fase {
 	public int getNumeroColunas() {
 		return tabuleiro.getNumeroColunas();
 	}
-
+	
 	public Elemento elementoEm(Posicao posicao) {
 		return tabuleiro.elementoEm(posicao);
 	}

@@ -5,6 +5,8 @@ public class Tabuleiro {
 	private Elemento[][] matriz;
 	private SaidaJogo saida;
 	private Posicao posicaoDoPortalOculto;
+	private boolean urtigaAtivado;
+	private Direcao ultimaDirecao;
 
 	public Tabuleiro(Elemento[][] matriz) {
 		this.matriz = matriz;
@@ -26,7 +28,16 @@ public class Tabuleiro {
 	public int getNumeroColunas() {
 		return matriz[0].length;
 	}
+	
+	public void ativarUrtiga() {
+		urtigaAtivado = true;
+	}
+	
+	public void desativarUrtiga() {
+		urtigaAtivado = false;
+	}
 
+	
 	public Elemento elementoEm(Posicao posicao) {
 		return matriz[posicao.getLinha()][posicao.getColuna()];
 	}
@@ -36,29 +47,17 @@ public class Tabuleiro {
 		Posicao posicaoNova = posicaoAntiga.somar(d);
 
 		if (posicaoEhInvalida(posicaoNova)) return;
-
-		Elemento elementoAlcancado = elementoEm(posicaoNova);
-
-		alterarElemento(posicaoAntiga, Elemento.GRAMA);
-		alterarElemento(posicaoNova, Elemento.PERSONAGEM);
-
-		switch (elementoAlcancado) {
-		case AGUA:
-			saida.perderJogo();
-			break;
-
-		case MACA:
-			if (quantidadeMacasRestantes() == 0) reexibirPortal();
-			break;
-
-		case PORTAL:
-			saida.passarDeFase();
-			break;
-
-		default:
-			break;
+		
+		if (urtigaAtivado) {
+			if (ultimaDirecao == d) {
+				mover(posicaoAntiga, posicaoNova);
+				ultimaDirecao = null;
+			} else {
+				ultimaDirecao = d;
+			}
+		} else {
+			mover(posicaoAntiga, posicaoNova);
 		}
-
 	}
 
 	private void ocultarPortal() {
@@ -102,6 +101,36 @@ public class Tabuleiro {
 	private boolean posicaoEhInvalida(Posicao p) {
 		return p.getLinha() < 0 || p.getLinha() >= getNumeroLinhas()
 				|| p.getColuna() < 0 || p.getColuna() >= getNumeroColunas();
+	}
+	
+	private void mover(Posicao posicaoAntiga, Posicao posicaoNova) {
+		Elemento elementoAlcancado = elementoEm(posicaoNova);
+		
+		alterarElemento(posicaoAntiga, Elemento.GRAMA);
+		alterarElemento(posicaoNova, Elemento.PERSONAGEM);
+
+		switch (elementoAlcancado) {
+		case AGUA:
+			saida.perderJogo();
+			break;
+
+		case MACA:
+			if (quantidadeMacasRestantes() == 0) reexibirPortal();
+			break;
+
+		case PORTAL:
+			desativarUrtiga();
+			ultimaDirecao = null;
+			saida.passarDeFase();
+			break;
+			
+		case URTIGA:
+			ativarUrtiga();
+			break;
+
+		default:
+			break;
+		}
 	}
 
 }
