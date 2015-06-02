@@ -2,12 +2,12 @@ package com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefin
 
 public enum Elemento {
 
-	AGUA("/agua.gif"),
+	AGUA("/agua.png"),
 	MACA("/maca.png"),
 	PERSONAGEM("/personagem.png"),
-	GRAMA("/grama.gif"),
+	GRAMA("/grama.png"),
 	PORTAL("/passagem.png"),
-	URTIGA("/urtiga.gif"),
+	URTIGA("/urtiga.png"),
 	;
 
 	private final String caminhoImagem;
