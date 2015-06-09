@@ -1,0 +1,14 @@
+inicio:
+  meu_contador = 10
+  vida = 10
+  macas = 1
+  urtiga? = false
+  numero_de_passos = 0
+
+*  *  : numero_de_passos += 1
+*  *  : meu_contador = 1
+*  *  : se 2 < 1 entao mensagem "nunca imprime"
+10 5  : fechar_portal
+15 5  : se meu_contador < 0 entao abrir_portal
+AGUA  : vida -= 1 && mover_para posicao_anterior
+URTIGA: urtiga = true
