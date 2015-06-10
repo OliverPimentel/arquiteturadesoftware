@@ -1,50 +1,82 @@
 package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.FilePosition;
-
 public class Scanner {
-	private Scanner() {	}
-
+	private int line;
+	private int column;
+	private List<Token> tokens;
+	
+	private Scanner() {
+		line = 1;
+		column = 1;
+		tokens = new ArrayList<>();
+	}
+	
 	public static List<Token> read(File file) throws ScannerException {
+		StringBuilder sb = new StringBuilder();
+		
+		try (java.util.Scanner scan = new java.util.Scanner(file)) {
+			while (scan.hasNext()) {
+				sb.append(scan.nextLine());
+				sb.append("\n");
+			}
+		} catch (FileNotFoundException e) { throw new ScannerException(0, 0, e); }
+		
+		return new Scanner().readSource(sb.toString().trim());
 	}
 	
 	public static List<Token> read(String path) throws ScannerException {
+		return read(new File(path));
 	}
 	
 	private List<Token> readSource(String sourceCode) throws ScannerException {
-		int currentLine = 0, currentColumn = 0;
-		List<Token> tokens = new ArrayList<Token>();
-		
-		for (String line : sourceCode.split("\n")) {
-			try (java.util.Scanner scanner = new java.util.Scanner(line)) {
-				currentLine++;
-				currentColumn = 0;
-				
-				while (scanner.hasNext()) {
-					Token token = analize(scanner.next(), currentLine, currentColumn);
-					
-					if (token == null) throw new ScannerException(currentLine, currentColumn, null);
-					
-					tokens.add(token);
-					currentColumn += token.getLexeme().length();
-				}
-				
-				tokens.add(new Token("\n", TokenCategory.NEW_LINE, new FilePosition(currentLine, currentColumn)));
-			}
+		try (java.util.Scanner scanner = new java.util.Scanner(sourceCode)) {
+			analize(scanner);
+			return tokens;
 		}
-		
-		return tokens;
 	}
 	
-	private Token analize(String lexeme, int line, int column) {
-		FilePosition position = new FilePosition(line, column);
+	private void analize(java.util.Scanner scanner) throws ScannerException {
+		if (!scanner.hasNext()) return;
+		
+		StringBuilder builder = new StringBuilder(scanner.next());
+		if (builder.length() == 0) { line++; column = 0; };
+		
+		Token token = extractToken(builder.toString());
+		while (token == null && scanner.hasNext()) {
+			String newFragment = scanner.next();
+			if (newFragment.isEmpty()) { line++; column = 0; }
+			builder.append(newFragment);
+			token = extractToken(builder.toString());
+		}
+		
+		if (token == null) {
+			int end = builder.indexOf("\n");
+			String msg = "Unexpected token: " + builder.substring(0, end == -1 ? 0 : end) + "...";
+			
+			throw new ScannerException(line, column, new Throwable(msg));
+		}
+		
+		if (token.getCategory() == TokenCategory.NEW_LINE) {
+			line++;
+			column = 1;
+		} else {
+			column += token.getLexeme().length();
+		}
+		
+		tokens.add(token);
+		
+		analize(scanner);
+	}
+	
+	private Token extractToken(String source) {
 		for (TokenCategory category : TokenCategory.values()) {
-			if (category.matches(lexeme)) {
-				return new Token(lexeme, category, position);
+			if (category.matches(source)) {
+				return new Token(source, category);
 			}
 		}
 		return null;

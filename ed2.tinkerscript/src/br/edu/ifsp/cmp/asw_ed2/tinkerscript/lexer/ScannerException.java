@@ -10,6 +10,6 @@ public class ScannerException extends Exception {
 	}
 	
 	public ScannerException(int line, int column, Throwable cause) {
-		super("Error while reading source code (at " + line + ":" + column + ") " + cause.getMessage(), cause);
+		super("Error while reading source code (at " + line + ":" + column + ")", cause);
 	}
 }
