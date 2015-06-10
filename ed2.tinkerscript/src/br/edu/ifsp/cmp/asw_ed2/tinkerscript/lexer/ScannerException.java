@@ -1,4 +1,6 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
+
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.FilePosition;
 
 public class ScannerException extends Exception {
 	private static final long serialVersionUID = -1027886543236653627L;

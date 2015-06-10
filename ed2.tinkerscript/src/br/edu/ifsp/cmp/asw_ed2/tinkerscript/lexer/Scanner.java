@@ -1,16 +1,18 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.tokens.Token;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.tokens.TokenCategory;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.FilePosition;
 
 public class Scanner {
 	private Scanner() {	}
+
+	public static List<Token> read(File file) throws ScannerException {
+	}
 	
-	public static List<Token> read(String sourceCode) throws ScannerException {
-		return new Scanner().readSource(sourceCode);
+	public static List<Token> read(String path) throws ScannerException {
 	}
 	
 	private List<Token> readSource(String sourceCode) throws ScannerException {

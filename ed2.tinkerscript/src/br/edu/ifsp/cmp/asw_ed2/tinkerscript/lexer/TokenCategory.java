@@ -1,4 +1,4 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript.tokens;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
 
 import java.util.regex.Pattern;
 
