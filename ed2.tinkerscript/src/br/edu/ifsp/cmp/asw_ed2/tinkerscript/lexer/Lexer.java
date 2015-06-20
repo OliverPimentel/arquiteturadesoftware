@@ -70,6 +70,7 @@ public class Lexer implements Iterable<Token> {
 			for (int i = 0; i < tabsToInsert - (categoryName.length() / tabSize); i++)
 				lineBuilder.append('\t');
 			
+			lineBuilder.append('\t').append(token.getPosition().toString()).append('\t');
 			lineBuilder.append('"').append(token.getLexeme().replace("\n", "\\n")).append('"');
 			
 			System.out.println(lineBuilder.toString());
@@ -93,6 +94,7 @@ public class Lexer implements Iterable<Token> {
 				while (TokenCategory.WHITESPACE.matches(character = next()));
 				tokens.add(tokenize(blankBuilder.toString()));
 			} else {
+				column++;
 				tokens.add(tokenize(character));
 				character = next();
 			}
@@ -109,7 +111,7 @@ public class Lexer implements Iterable<Token> {
 			char character = (char) input.read();
 			
 			if (character == '\n') { line += 1; column = 0; }
-			column += 1;
+			column++;
 			
 			return character;
 		} catch (IOException e) {

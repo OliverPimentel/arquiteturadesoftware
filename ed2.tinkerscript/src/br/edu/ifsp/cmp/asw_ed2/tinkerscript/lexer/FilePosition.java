@@ -14,4 +14,7 @@ public class FilePosition {
 	public int getColumn() {
 		return column;
 	}
+	public String toString() {
+		return line + ":" + column;
+	}
 }

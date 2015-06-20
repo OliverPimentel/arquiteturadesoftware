@@ -24,6 +24,10 @@ public class Token {
 		return category;
 	}
 	
+	public FilePosition getPosition() {
+		return position;
+	}
+	
 	public void setFilePosition(FilePosition position) {
 		this.position = position;
 	}

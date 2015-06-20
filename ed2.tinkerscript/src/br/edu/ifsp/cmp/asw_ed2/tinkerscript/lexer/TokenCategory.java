@@ -6,7 +6,7 @@ public enum TokenCategory {
 	PROGRAM_BEGIN("inicio"),
 
 	WHITESPACE(" +"),
-	NEW_LINE("\\n+"),
+	NEW_LINE("\\r\\n|\\n|\\r"),
 	
 	NUMBER("[0-9]+"),
 	STAR_SYM("\\*"),
