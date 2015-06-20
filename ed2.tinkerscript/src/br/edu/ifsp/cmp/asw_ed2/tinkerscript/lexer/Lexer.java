@@ -17,6 +17,7 @@ public class Lexer implements Iterable<Token> {
 	List<Token> tokens;
 	StringBuilder tokenBuilder;
 	private int line, column;
+	private boolean lineFeedRead;
 	
 	public Lexer execute(String source) throws FileNotFoundException, UnsupportedEncodingException {
 		return new Lexer(new InputStreamReader(new ByteArrayInputStream(source.getBytes())));
@@ -28,7 +29,8 @@ public class Lexer implements Iterable<Token> {
 		tokenBuilder = new StringBuilder();
 		
 		line = 1;
-		column = 1;
+		column = 0;
+		lineFeedRead = false;
 	}
 	
 	public Lexer(File sourceFile, String charset) throws FileNotFoundException, UnsupportedEncodingException {
@@ -107,12 +109,12 @@ public class Lexer implements Iterable<Token> {
 	}
 	
 	private char next() throws LexerException {
+		if (lineFeedRead) { line += 1; column = 0; lineFeedRead = false; }
+		
 		try {
 			char character = (char) input.read();
-			
-			if (character == '\n') { line += 1; column = 0; }
 			column++;
-			
+			if (character == '\n') lineFeedRead = true;
 			return character;
 		} catch (IOException e) {
 			throw new LexerException(line, column, e);
@@ -121,11 +123,12 @@ public class Lexer implements Iterable<Token> {
 	
 	private Token tokenize(String lexeme) throws LexerException {
 		TokenCategory category = TokenCategory.findMatching(lexeme);
+		int lexemeStart = column - lexeme.length();
 		
 		if (category == null)
-			throw new LexerException(line, column, "Unexpected token: \"" + lexeme + "\"");
+			throw new LexerException(line, lexemeStart, "Unexpected token: \"" + lexeme + "\"");
 		
-		return new Token(lexeme, category, new FilePosition(line, column));
+		return new Token(lexeme, category, new FilePosition(line, lexemeStart));
 	}
 	
 	private Token tokenize(char smallLexeme) throws LexerException {
