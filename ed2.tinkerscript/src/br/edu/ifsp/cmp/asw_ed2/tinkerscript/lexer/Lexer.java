@@ -53,6 +53,31 @@ public class Lexer implements Iterable<Token> {
 		_compile(next());
 	}
 	
+	public void inspect() {
+		int tabSize = 8;
+		int longest = 0;
+		for (TokenCategory category : TokenCategory.values())
+			if (longest < category.name().length())
+				longest = category.name().length();
+		
+		int tabsToInsert = longest / tabSize;
+		StringBuilder lineBuilder = new StringBuilder();
+		
+		for (Token token : this) {
+			String categoryName = token.getCategory().name();
+			lineBuilder.append(categoryName);
+			
+			for (int i = 0; i < tabsToInsert - (categoryName.length() / tabSize); i++)
+				lineBuilder.append('\t');
+			
+			lineBuilder.append('"').append(token.getLexeme().replace("\n", "\\n")).append('"');
+			
+			System.out.println(lineBuilder.toString());
+			
+			lineBuilder.delete(0, lineBuilder.length());
+		}
+	}
+	
 	private void _compile(char character) throws LexerException {
 		if (character == (char) -1) return; // EOF reached?
 		
@@ -96,7 +121,7 @@ public class Lexer implements Iterable<Token> {
 		TokenCategory category = TokenCategory.findMatching(lexeme);
 		
 		if (category == null)
-			throw new LexerException(line, column, "Unexpected token: " + lexeme);
+			throw new LexerException(line, column, "Unexpected token: \"" + lexeme + "\"");
 		
 		return new Token(lexeme, category, new FilePosition(line, column));
 	}
