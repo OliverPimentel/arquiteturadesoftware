@@ -1,6 +1,5 @@
 package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.FilePosition;
 
 public class Token {
 	protected String lexeme;

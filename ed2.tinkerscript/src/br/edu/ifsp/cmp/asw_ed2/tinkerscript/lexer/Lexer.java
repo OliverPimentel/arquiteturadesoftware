@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.FilePosition;
-
 public class Lexer implements Iterable<Token> {
 	private Reader input;
 	List<Token> tokens;

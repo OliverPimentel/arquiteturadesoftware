@@ -1,11 +1,10 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer;
 
 public class FilePosition {
 	private int line;
 	private int column;
 	
 	public FilePosition(int line, int column) {
-		super();
 		this.line = line;
 		this.column = column;
 	}
