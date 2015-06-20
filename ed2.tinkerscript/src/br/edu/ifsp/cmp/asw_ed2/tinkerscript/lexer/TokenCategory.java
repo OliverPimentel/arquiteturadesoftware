@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 public enum TokenCategory {
 	PROGRAM_BEGIN("inicio"),
+	PROGRAM_END(null),
 
 	WHITESPACE(" +"),
 	NEW_LINE("\\r\\n|\\n|\\r"),
@@ -58,6 +59,7 @@ public enum TokenCategory {
 	}
 	
 	public boolean matches(String input) {
+		if (pattern == null) return false;
 		return pattern.matcher(input).matches();
 	}
 }

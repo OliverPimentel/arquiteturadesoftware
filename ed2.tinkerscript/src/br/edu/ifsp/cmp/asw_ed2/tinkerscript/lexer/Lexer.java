@@ -82,12 +82,11 @@ public class Lexer implements Iterable<Token> {
 	}
 	
 	private void _compile(char character) throws LexerException {
-		if (character == (char) -1) return; // EOF reached?
+		// Reached EOF
+		if (character == (char) -1) { addTokenFromBuilder(); return; }
 		
 		if (TokenCategory.isSeparator(character)) {
-			if (tokenBuilder.length() > 0)
-				tokens.add(tokenize(tokenBuilder.toString()));
-			tokenBuilder.delete(0, tokenBuilder.length());
+			addTokenFromBuilder();
 			
 			// avoid creating multiple tokens for consecutive white-spaces
 			if (TokenCategory.WHITESPACE.matches(String.valueOf(character))) {
@@ -106,6 +105,12 @@ public class Lexer implements Iterable<Token> {
 		}
 		
 		_compile(character);
+	}
+	
+	private void addTokenFromBuilder() throws LexerException {
+		if (tokenBuilder.length() > 0)
+			tokens.add(tokenize(tokenBuilder.toString()));
+		tokenBuilder.delete(0, tokenBuilder.length());
 	}
 	
 	private char next() throws LexerException {

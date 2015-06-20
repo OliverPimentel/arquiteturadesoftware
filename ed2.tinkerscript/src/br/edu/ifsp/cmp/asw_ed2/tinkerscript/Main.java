@@ -12,6 +12,7 @@ public class Main {
 			Lexer lex = new Lexer("exemplo.tinkerscript");
 			lex.compile();
 			lex.inspect();
+			
 			System.out.println("fim");
 		} catch (FileNotFoundException | UnsupportedEncodingException | LexerException e) {
 			e.printStackTrace();
