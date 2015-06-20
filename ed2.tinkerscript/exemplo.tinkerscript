@@ -1,6 +1,6 @@
 inicio:
   meu_contador = 10
-  vida = 10
+   = 10
   macas = 1
   urtiga? = false
   numero_de_passos = 0

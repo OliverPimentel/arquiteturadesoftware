@@ -16,7 +16,7 @@ public class Scanner {
 		tokens = new ArrayList<>();
 	}
 	
-	public static List<Token> read(File file) throws ScannerException {
+	public static List<Token> read(File file) throws LexerException {
 		StringBuilder sb = new StringBuilder();
 		
 		try (java.util.Scanner scan = new java.util.Scanner(file)) {
@@ -24,23 +24,23 @@ public class Scanner {
 				sb.append(scan.nextLine());
 				sb.append("\n");
 			}
-		} catch (FileNotFoundException e) { throw new ScannerException(0, 0, e); }
+		} catch (FileNotFoundException e) { throw new LexerException(0, 0, e); }
 		
 		return new Scanner().readSource(sb.toString().trim());
 	}
 	
-	public static List<Token> read(String path) throws ScannerException {
+	public static List<Token> read(String path) throws LexerException {
 		return read(new File(path));
 	}
 	
-	private List<Token> readSource(String sourceCode) throws ScannerException {
+	private List<Token> readSource(String sourceCode) throws LexerException {
 		try (java.util.Scanner scanner = new java.util.Scanner(sourceCode)) {
 			analize(scanner);
 			return tokens;
 		}
 	}
 	
-	private void analize(java.util.Scanner scanner) throws ScannerException {
+	private void analize(java.util.Scanner scanner) throws LexerException {
 		if (!scanner.hasNext()) return;
 		
 		StringBuilder builder = new StringBuilder(scanner.next());
@@ -58,7 +58,7 @@ public class Scanner {
 			int end = builder.indexOf("\n");
 			String msg = "Unexpected token: " + builder.substring(0, end == -1 ? 0 : end) + "...";
 			
-			throw new ScannerException(line, column, new Throwable(msg));
+			throw new LexerException(line, column, new Throwable(msg));
 		}
 		
 		if (token.getCategory() == TokenCategory.NEW_LINE) {
