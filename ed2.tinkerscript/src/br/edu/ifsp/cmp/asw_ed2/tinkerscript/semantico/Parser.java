@@ -1,22 +1,22 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser.ast.AbstractSyntaxTree;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.ast.ArvoreSintaticaAbstrata;
 
 public class Parser {
 	private AnalisadorLexico lex;
 	private Grammar grammar;
-	AbstractSyntaxTree ast;
+	ArvoreSintaticaAbstrata ast;
 	
 	public Parser(AnalisadorLexico lex) {
 		this.lex = lex;
 		grammar = Grammar.tinkerscriptGrammar();
 	}
 	
-	public AbstractSyntaxTree compile() {
+	public ArvoreSintaticaAbstrata compile() {
 		RulesStateMachine rules = grammar.getRulesStageMachine();
-		ast = new AbstractSyntaxTree();
+		ast = new ArvoreSintaticaAbstrata();
 		
 		for (SimboloLexico token : lex) {
 			if (rules.change(token.getCategoria().name())) {

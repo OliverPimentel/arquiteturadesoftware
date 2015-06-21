@@ -1,4 +1,4 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico;
 
 import java.util.ArrayList;
 import java.util.Iterator;

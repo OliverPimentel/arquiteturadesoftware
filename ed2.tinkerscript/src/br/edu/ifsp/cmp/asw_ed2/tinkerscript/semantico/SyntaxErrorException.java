@@ -1,4 +1,4 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser;
+package br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico;
 
 public class SyntaxErrorException extends Exception {
 	private static final long serialVersionUID = 2871102525129311223L;

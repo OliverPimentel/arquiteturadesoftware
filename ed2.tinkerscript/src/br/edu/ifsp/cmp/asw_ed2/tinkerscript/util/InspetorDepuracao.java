@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser.Parser;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.Parser;
 
 public class InspetorDepuracao {
 	public static final int LARGURA_TABULACAO = 8;
