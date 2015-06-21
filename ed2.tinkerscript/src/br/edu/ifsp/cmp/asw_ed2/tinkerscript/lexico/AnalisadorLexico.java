@@ -59,10 +59,10 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 		if (novaLinha) { linha += 1; coluna = 0; novaLinha = false; }
 		
 		try {
-			char character = (char) entrada.read();
+			char caractere = (char) entrada.read();
 			coluna++;
-			if (character == '\n') novaLinha = true;
-			return character;
+			if (caractere == '\n') novaLinha = true;
+			return caractere;
 		} catch (IOException e) {
 			throw new AnalisadorLexicoException(linha, coluna, e);
 		}
@@ -86,7 +86,6 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 				while (SimboloLexicoCategoria.ESPACO.casaCom(caractere = lerCaracter()));
 				salvarSimboloLexico(espacos);
 			} else {
-				coluna++;
 				salvarSimboloLexico(caractere);
 				caractere = lerCaracter();
 			}
@@ -108,16 +107,17 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	}
 	
 	private void salvarSimboloLexico(String lexema) throws AnalisadorLexicoException {
-		simbolos.add(gerarSimboloLexicoDoLexema(lexema.toString()));
+		int lexemaInicio = coluna - lexema.length();
+		
+		simbolos.add(gerarSimboloLexicoDoLexema(lexema.toString(), lexemaInicio));
 	}
 	
 	private void salvarSimboloLexico(char simbolo) throws AnalisadorLexicoException {
 		simbolos.add(gerarSimboloLexicoDoLexema(simbolo));
 	}
 	
-	private SimboloLexico gerarSimboloLexicoDoLexema(String lexema) throws AnalisadorLexicoException {
+	private SimboloLexico gerarSimboloLexicoDoLexema(String lexema, int lexemaInicio) throws AnalisadorLexicoException {
 		SimboloLexicoCategoria categoria = SimboloLexicoCategoria.buscarCasamentoCom(lexema);
-		int lexemaInicio = coluna - lexema.length();
 		
 		if (categoria == null)
 			throw new AnalisadorLexicoException(linha, lexemaInicio, "Simbolo inesperado: \"" + lexema + "\"");
@@ -130,6 +130,6 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 		
 		if (caractere == ((char) -1)) simbolo = ""; // EOF
 		else 						  simbolo = Character.toString(caractere);
-		return gerarSimboloLexicoDoLexema(simbolo);
+		return gerarSimboloLexicoDoLexema(simbolo, coluna);
 	}
 }

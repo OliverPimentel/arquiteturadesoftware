@@ -28,7 +28,7 @@ public enum SimboloLexicoCategoria {
 	
 	NOTACAO_STRING("\""),
 	
-	IDENTIFICADOR(".+")
+	IDENTIFICADOR("[^']+")
 	;
 	
 	public static final String SEPARADORES = "\\\"'!@#$%&^~,.:;+-*/=|<>()[]{} \r\n\t";

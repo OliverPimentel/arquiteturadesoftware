@@ -13,8 +13,10 @@ public class Main {
 			AnalisadorLexico lexico = new AnalisadorLexico("exemplo.tinkerscript");
 			lexico.analisar();
 			InspetorDepuracao.padrao().visualizar(lexico);
-		} catch (FileNotFoundException | UnsupportedEncodingException | AnalisadorLexicoException e) {
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
+		} catch (AnalisadorLexicoException e) {
+			System.err.println(e.getMessage());
 		}
 	}
 }

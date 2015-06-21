@@ -50,8 +50,8 @@ public class InspetorDepuracao {
 		for (int i = 0; i < tabs; i++) linha.append('\t');
 	}
 	
-	private void envolver(String texto, char caracter) {
-		linha.append(caracter).append(texto).append(caracter);
+	private void envolver(String texto, char caractere) {
+		linha.append(caractere).append(texto).append(caractere);
 	}
 	
 	private void imprimirLinha() {
