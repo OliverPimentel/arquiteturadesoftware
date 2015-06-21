@@ -47,11 +47,11 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	
 	@Override
 	public Iterator<SimboloLexico> iterator() {
-		if (simbolos == null) throw new RuntimeException("É necessário compilar antes de iterar nos simbolos léxicos.");
+		if (simbolos == null) throw new RuntimeException("É necessário analisar antes de iterar nos simbolos léxicos.");
 		return simbolos.iterator(); 
 	}
 	
-	public void compilar() throws AnalisadorLexicoException {
+	public void analisar() throws AnalisadorLexicoException {
 		_compilar(lerCaracter());
 	}
 	
