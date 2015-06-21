@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public enum SimboloLexicoCategoria {
 	PROGRAMA_INICIO("inicio"),
-	PROGRAMA_FIM(null),
+	PROGRAMA_FIM(""),
 
 	ESPACO(" +"),
 	PULO_DE_LINHA("\\r\\n|\\n|\\r"),
@@ -59,7 +59,6 @@ public enum SimboloLexicoCategoria {
 	}
 	
 	public boolean casaCom(String entrada) {
-		if (padrao == null) return false;
 		return padrao.matcher(entrada).matches();
 	}
 }

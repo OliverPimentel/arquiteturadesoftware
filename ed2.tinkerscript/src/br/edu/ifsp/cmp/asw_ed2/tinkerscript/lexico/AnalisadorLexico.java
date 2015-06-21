@@ -69,8 +69,8 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	}
 	
 	private void _compilar(char caractere) throws AnalisadorLexicoException {
+		// Fim do arquivo (EOF)
 		if (caractere == (char) -1) {
-			// Reached EOF
 			salvarSimboloLexico();
 			salvarSimboloLexico(caractere);
 			return;
@@ -125,10 +125,11 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 		return new SimboloLexico(lexema, categoria, new Posicao(linha, lexemaInicio));
 	}
 	
-	private SimboloLexico gerarSimboloLexicoDoLexema(char simbolo) throws AnalisadorLexicoException {
-		if (((char) -1) == simbolo)
-			return new SimboloLexico("<EOF>", SimboloLexicoCategoria.PROGRAMA_FIM, new Posicao(linha, coluna));
+	private SimboloLexico gerarSimboloLexicoDoLexema(char caractere) throws AnalisadorLexicoException {
+		String simbolo;
 		
-		return gerarSimboloLexicoDoLexema(Character.toString(simbolo));
+		if (caractere == ((char) -1)) simbolo = ""; // EOF
+		else 						  simbolo = Character.toString(caractere);
+		return gerarSimboloLexicoDoLexema(simbolo);
 	}
 }
