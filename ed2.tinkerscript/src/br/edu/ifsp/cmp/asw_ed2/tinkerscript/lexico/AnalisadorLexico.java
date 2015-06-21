@@ -17,7 +17,7 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	List<SimboloLexico> simbolos;
 	StringBuilder lexema;
 	private int linha, coluna;
-	private boolean puloDeLinhaLido;
+	private boolean novaLinha;
 	
 	public AnalisadorLexico executar(String codigoFonte) throws FileNotFoundException, UnsupportedEncodingException {
 		return new AnalisadorLexico(new InputStreamReader(new ByteArrayInputStream(codigoFonte.getBytes())));
@@ -30,7 +30,7 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 		
 		linha = 1;
 		coluna = 0;
-		puloDeLinhaLido = false;
+		novaLinha = false;
 	}
 	
 	public AnalisadorLexico(File arquivoFonte, String charset) throws FileNotFoundException, UnsupportedEncodingException {
@@ -55,48 +55,64 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 		_compilar(lerCaracter());
 	}
 	
-	private void _compilar(char caracter) throws AnalisadorLexicoException {
-		if (caracter == (char) -1) { gerarSimboloLexico(); return; } // Reached EOF
-		
-		if (SimboloLexicoCategoria.ehSeparador(caracter)) {
-			gerarSimboloLexico();
-			
-			// avoid creating multiple tokens for consecutive white-spaces
-			if (SimboloLexicoCategoria.ESPACO.casaCom(String.valueOf(caracter))) {
-				StringBuilder espacosBuilder = new StringBuilder();
-				do { espacosBuilder.append(caracter); }
-				while (SimboloLexicoCategoria.ESPACO.casaCom(caracter = lerCaracter()));
-				simbolos.add(gerarSimboloLexicoDoLexema(espacosBuilder.toString()));
-			} else {
-				coluna++;
-				simbolos.add(gerarSimboloLexicoDoLexema(caracter));
-				caracter = lerCaracter();
-			}
-		} else {
-			lexema.append(caracter);
-			caracter = lerCaracter();
-		}
-		
-		_compilar(caracter);
-	}
-	
-	private void gerarSimboloLexico() throws AnalisadorLexicoException {
-		if (lexema.length() > 0)
-			simbolos.add(gerarSimboloLexicoDoLexema(lexema.toString()));
-		lexema.delete(0, lexema.length());
-	}
-	
 	private char lerCaracter() throws AnalisadorLexicoException {
-		if (puloDeLinhaLido) { linha += 1; coluna = 0; puloDeLinhaLido = false; }
+		if (novaLinha) { linha += 1; coluna = 0; novaLinha = false; }
 		
 		try {
 			char character = (char) entrada.read();
 			coluna++;
-			if (character == '\n') puloDeLinhaLido = true;
+			if (character == '\n') novaLinha = true;
 			return character;
 		} catch (IOException e) {
 			throw new AnalisadorLexicoException(linha, coluna, e);
 		}
+	}
+	
+	private void _compilar(char caractere) throws AnalisadorLexicoException {
+		if (caractere == (char) -1) {
+			// Reached EOF
+			salvarSimboloLexico();
+			salvarSimboloLexico(caractere);
+			return;
+		}
+		
+		if (SimboloLexicoCategoria.ehSeparador(caractere)) {
+			salvarSimboloLexico();
+			
+			// avoid creating multiple tokens for consecutive white-spaces
+			if (SimboloLexicoCategoria.ESPACO.casaCom(String.valueOf(caractere))) {
+				StringBuilder espacos = new StringBuilder();
+				do { espacos.append(caractere); }
+				while (SimboloLexicoCategoria.ESPACO.casaCom(caractere = lerCaracter()));
+				salvarSimboloLexico(espacos);
+			} else {
+				coluna++;
+				salvarSimboloLexico(caractere);
+				caractere = lerCaracter();
+			}
+		} else {
+			lexema.append(caractere);
+			caractere = lerCaracter();
+		}
+		
+		_compilar(caractere);
+	}
+	
+	private void salvarSimboloLexico() throws AnalisadorLexicoException {
+		salvarSimboloLexico(lexema);
+	}
+
+	private void salvarSimboloLexico(StringBuilder lexema) throws AnalisadorLexicoException {
+		if (lexema.length() > 0) salvarSimboloLexico(lexema.toString());
+		lexema.delete(0, lexema.length());
+	}
+	
+	private void salvarSimboloLexico(String lexema) throws AnalisadorLexicoException {
+		simbolos.add(gerarSimboloLexicoDoLexema(lexema.toString()));
+	}
+	
+	private void salvarSimboloLexico(char simbolo) throws AnalisadorLexicoException {
+		simbolos.add(gerarSimboloLexicoDoLexema(simbolo));
 	}
 	
 	private SimboloLexico gerarSimboloLexicoDoLexema(String lexema) throws AnalisadorLexicoException {
@@ -110,6 +126,9 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	}
 	
 	private SimboloLexico gerarSimboloLexicoDoLexema(char simbolo) throws AnalisadorLexicoException {
+		if (((char) -1) == simbolo)
+			return new SimboloLexico("<EOF>", SimboloLexicoCategoria.PROGRAMA_FIM, new Posicao(linha, coluna));
+		
 		return gerarSimboloLexicoDoLexema(Character.toString(simbolo));
 	}
 }
