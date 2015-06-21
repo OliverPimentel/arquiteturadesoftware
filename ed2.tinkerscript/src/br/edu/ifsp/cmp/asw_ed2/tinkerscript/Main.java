@@ -3,18 +3,23 @@ package br.edu.ifsp.cmp.asw_ed2.tinkerscript;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer.Lexer;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexer.LexerException;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexicoException;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.parser.Parser;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.Inspector;
 
 public class Main {
 	public static void main(String[] args) {
 		try {
-			Lexer lex = new Lexer("exemplo.tinkerscript");
-			lex.compile();
-			lex.inspect();
+			AnalisadorLexico lexer = new AnalisadorLexico("exemplo.tinkerscript");
+			lexer.compilar();
+			Inspector.inspect(lexer);
 			
-			System.out.println("fim");
-		} catch (FileNotFoundException | UnsupportedEncodingException | LexerException e) {
+//			Parser parser = new Parser(lexer);
+//			parser.compile();
+//			Inspector.inspect(parser);
+			
+		} catch (FileNotFoundException | UnsupportedEncodingException | AnalisadorLexicoException e) {
 			e.printStackTrace();
 		}
 	}

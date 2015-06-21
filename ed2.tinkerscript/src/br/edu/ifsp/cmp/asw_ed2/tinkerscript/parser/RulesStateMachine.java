@@ -7,12 +7,14 @@ import java.util.Set;
 
 public class RulesStateMachine {
 	private String current;
+	private String initial;
 	
 	private Map<String,Set<String>> states;
 	
 	public RulesStateMachine(String initial) {
 		states = new HashMap<>();
 		current = initial;
+		this.initial = initial;
 		
 		addState(initial);
 	}
@@ -25,6 +27,10 @@ public class RulesStateMachine {
 		addState(fromState);
 		
 		states.get(fromState).add(toState);
+	}
+	
+	public void reset() {
+		current = initial;
 	}
 	
 	public boolean change(String state) {
