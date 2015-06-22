@@ -13,7 +13,7 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.InspetorDepuracao;
 public class Main {
 	public static void main(String[] args) {
 		try {
-			AnalisadorLexico lexico = new AnalisadorLexico("exemplo2.tinkerscript");
+			AnalisadorLexico lexico = new AnalisadorLexico("exemplo.tinkerscript");
 			lexico.analisar();
 			
 			System.out.println("\n\nLéxico");

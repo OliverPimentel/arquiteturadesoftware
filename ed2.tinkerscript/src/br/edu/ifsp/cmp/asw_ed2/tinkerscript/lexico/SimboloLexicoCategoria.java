@@ -8,14 +8,20 @@ public enum SimboloLexicoCategoria {
 
 	ESPACO(" +"),
 	PULO_DE_LINHA("\\r\\n|\\n|\\r"),
-	
-	NUMERO("[0-9]+"),
-	ASTERISCO("\\*"),
+	VIRGULA(","),
 	DOIS_PONTOS(":"),
 	
+	NUMERO("[0-9]+"),
 	MENOR_QUE("<"),
 	MAIOR_QUE(">"),
 	IGUAL("="),
+	ABRE_PARENT("\\("),
+	FECHA_PARENT("\\)"),
+	
+	MAIS("\\+"),
+	MENOS("-"),
+	DIVISAO("/"),
+	ASTERISCO("\\*"),
 	
 	E("&"),
 	OU("\\|"),

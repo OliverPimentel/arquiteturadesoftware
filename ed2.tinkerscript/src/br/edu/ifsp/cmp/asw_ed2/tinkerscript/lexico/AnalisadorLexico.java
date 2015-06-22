@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	private Reader entrada;
@@ -46,9 +46,9 @@ public class AnalisadorLexico implements Iterable<SimboloLexico> {
 	}
 	
 	@Override
-	public Iterator<SimboloLexico> iterator() {
+	public ListIterator<SimboloLexico> iterator() {
 		if (simbolos == null) throw new RuntimeException("É necessário analisar antes de iterar nos simbolos léxicos.");
-		return simbolos.iterator(); 
+		return simbolos.listIterator(); 
 	}
 	
 	public void analisar() throws AnalisadorLexicoException {
