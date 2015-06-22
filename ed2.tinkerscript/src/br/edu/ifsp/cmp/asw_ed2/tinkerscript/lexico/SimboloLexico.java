@@ -35,7 +35,7 @@ public class SimboloLexico {
 	public String toString() {
 		return new StringBuilder(categoria.name())
 		.append("(")
-		.append(lexema)
+		.append(lexema.replace("\n", "\\n"))
 		.append(") [")
 		.append(posicao.toString())
 		.append("] ")

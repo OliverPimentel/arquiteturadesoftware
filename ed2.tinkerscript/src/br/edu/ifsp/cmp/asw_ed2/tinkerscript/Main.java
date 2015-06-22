@@ -18,8 +18,6 @@ public class Main {
 			
 			AnalisadorSintatico sintaxe = new AnalisadorSintatico(lexico);
 			sintaxe.analisar();
-			InspetorDepuracao.padrao().visualizar(sintaxe);
-			
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {

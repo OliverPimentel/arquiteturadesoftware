@@ -7,8 +7,6 @@ import java.util.stream.Stream;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.AnalisadorSintatico;
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 
 public class InspetorDepuracao {
 	public static final int LARGURA_TABULACAO = 8;
@@ -37,15 +35,6 @@ public class InspetorDepuracao {
 			envolver(simbolo.getLexema().replace("\n", "\\n"), '"');
 			
 			imprimirLinha();
-		}
-	}
-	
-	public void visualizar(AnalisadorSintatico sintaxe) {
-		try {
-			sintaxe.analisar();
-			System.out.println("Sintaxe: OK");
-		} catch (ErroDeSintaxeException e) {
-			System.out.println("Sintaxe: Failure: " + e.getMessage());
 		}
 	}
 	
