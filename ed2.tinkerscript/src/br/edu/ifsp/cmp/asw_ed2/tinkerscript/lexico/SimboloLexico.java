@@ -31,4 +31,14 @@ public class SimboloLexico {
 	public void setPosicao(Posicao posicao) {
 		this.posicao = posicao;
 	}
+	
+	public String toString() {
+		return new StringBuilder(categoria.name())
+		.append("(")
+		.append(lexema)
+		.append(") [")
+		.append(posicao.toString())
+		.append("] ")
+		.toString();
+	}
 }

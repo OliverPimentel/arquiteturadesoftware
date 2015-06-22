@@ -1,0 +1,14 @@
+inicio:
+  meu_contador = 10
+  λ = 10
+  macas = 1
+  urtiga? = false
+  numero_de_passos = 0
+
+*  *  : 1
+*  *  : 2
+*  *  : 3
+10 5  : 2
+15 5  : 42
+AGUA  : 1
+URTIGA: 0
