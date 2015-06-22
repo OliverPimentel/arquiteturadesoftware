@@ -10,6 +10,10 @@ public class NóIdentificador extends NóAbstrato {
 		this.simbolo = simbolo;
 	}
 	
+	public String identificador() {
+		return simbolo.getLexema();
+	}
+	
 	@Override
 	public String toString() {
 		return super.toString() + " " + simbolo.getLexema(); 

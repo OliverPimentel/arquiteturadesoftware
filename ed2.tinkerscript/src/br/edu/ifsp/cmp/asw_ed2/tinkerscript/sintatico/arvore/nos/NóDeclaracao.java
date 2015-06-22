@@ -11,4 +11,12 @@ public class NóDeclaracao extends NóAbstrato {
 	public void adicionar(NóNumero valor) {
 		filhos.add(1, valor);
 	}
+	
+	public void adicionar(NóBooleano valor) {
+		filhos.add(1, valor);
+	}
+	
+	public String identificador() {
+		return ((NóIdentificador) filho(0)).identificador();
+	}
 }

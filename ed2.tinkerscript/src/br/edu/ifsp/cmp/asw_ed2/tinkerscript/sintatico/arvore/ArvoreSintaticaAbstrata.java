@@ -1,15 +1,15 @@
 package br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore;
 
-import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPrograma;
 
 public class ArvoreSintaticaAbstrata {
-	private NóAbstrato raiz;
+	private NóPrograma raiz;
 	
-	public ArvoreSintaticaAbstrata(NóAbstrato raiz) {
+	public ArvoreSintaticaAbstrata(NóPrograma raiz) {
 		this.raiz = raiz;
 	}
 	
-	public NóAbstrato getRaiz() {
+	public NóPrograma getRaiz() {
 		return raiz;
 	}
 }

@@ -9,6 +9,10 @@ public class NóNumero extends NóAbstrato {
 		this.simbolo = simbolo;
 	}
 	
+	public Integer valor() {
+		return Integer.valueOf(simbolo.getLexema());
+	}
+	
 	@Override
 	public String toString() {
 		return super.toString() + " " + simbolo.getLexema(); 

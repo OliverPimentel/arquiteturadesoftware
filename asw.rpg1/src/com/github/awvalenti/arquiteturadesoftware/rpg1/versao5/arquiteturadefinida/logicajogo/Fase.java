@@ -30,4 +30,12 @@ public class Fase {
 	public void fazerMovimento(Direcao d) {
 		tabuleiro.fazerMovimento(d);
 	}
+	
+	public void ativarUrtiga() {
+		tabuleiro.ativarUrtiga();
+	}
+	
+	public void desativarUrtiga() {
+		tabuleiro.desativarUrtiga();
+	}
 }

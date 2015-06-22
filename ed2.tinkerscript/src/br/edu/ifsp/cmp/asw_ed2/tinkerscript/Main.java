@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexicoException;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.AmbienteDeExecucao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.AnalisadorSintatico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
@@ -25,6 +26,10 @@ public class Main {
 			System.out.println("\n\nÁrvore sintática abstrata (pre-ordem)");
 			InspetorDepuracao.padrao().visualizar(ast);
 			
+			System.out.println("\n\nRuntime");
+			AmbienteDeExecucao ambiente = AmbienteDeExecucao.teste();
+			ambiente.executar(ast);
+			InspetorDepuracao.padrao().visualizar(ambiente);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {

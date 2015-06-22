@@ -2,11 +2,13 @@ package br.edu.ifsp.cmp.asw_ed2.tinkerscript.util;
 
 import static java.util.stream.Collectors.maxBy;
 
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.AmbienteDeExecucao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
 
@@ -37,6 +39,12 @@ public class InspetorDepuracao {
 			envolver(simbolo.getLexema().replace("\n", "\\n"), '"');
 			
 			imprimirLinha();
+		}
+	}
+	
+	public void visualizar(AmbienteDeExecucao ambiente) {
+		for (Entry<String,Object> entrada : ambiente.getTabelaDeSimbolos().entrySet()) {
+			System.out.println("-> " + entrada.getKey() + "\n" + entrada.getValue() + "\n");
 		}
 	}
 	
