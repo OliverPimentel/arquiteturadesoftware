@@ -38,13 +38,18 @@ public class AnalisadorSintatico {
 	private boolean aceita(SimboloLexicoCategoria categoria, NóAbstrato nó, SimboloLexicoCategoria... ignorar) {
 		if (ignorar.length > 0)	{
 			while (atual != null && Stream.of(ignorar).anyMatch(atual.getCategoria()::equals)) {
-				System.out.print("[" + Stream.of(ignorar).map(Enum::name).collect(Collectors.joining("/")) + "] ");
+				//System.out.print("[" + Stream.of(ignorar).map(Enum::name).collect(Collectors.joining("/")) + "] ");
 				proximoSimbolo();
 			}
 		}
 		
 		if (atual == null) { return false; }
-		if (atual.getCategoria().equals(categoria)) { if (nó != null) nó.adicionar(criarNóDe(atual)); System.out.print(categoria.name() + (categoria == PULO_DE_LINHA ? "\n" : " ")); proximoSimbolo(); return true; }
+		if (atual.getCategoria().equals(categoria)) {
+			if (nó != null) nó.adicionar(criarNóDe(atual));
+			//System.out.print(categoria.name() + (categoria == PULO_DE_LINHA ? "\n" : " "));
+			proximoSimbolo();
+			return true;
+		}
 		return false;		
 	}
 	
@@ -90,14 +95,14 @@ public class AnalisadorSintatico {
 	private NóPrograma programa() throws ErroDeSintaxeException {
 		NóPrograma nó = new NóPrograma();
 		
-		System.out.print("programa( ");
+		//System.out.print("programa( ");
 		esperado(PROGRAMA_INICIO, null, ESPACO, PULO_DE_LINHA);
 		esperado(DOIS_PONTOS, null);
 		esperadoComEspacos(PULO_DE_LINHA, null);
 		nó.adicionar(declaracoes(null));
 		nó.adicionar(comandos(null));
 		esperado(PROGRAMA_FIM, null);
-		System.out.print("\n)\n");
+		//System.out.print("\n)\n");
 		
 		return nó;
 	}
@@ -105,11 +110,11 @@ public class AnalisadorSintatico {
 	private NóDeclaracoes declaracoes(NóDeclaracoes raiz) throws ErroDeSintaxeException {
 		if (raiz == null) raiz = new NóDeclaracoes();
 		
-		System.out.print("declaracoes( ");
+		//System.out.print("declaracoes( ");
 		raiz.adicionar(declaracao());
 		if (aceita(PULO_DE_LINHA, null));
 		else return declaracoes(raiz);
-		System.out.print(") ");
+		//System.out.print(") ");
 		
 		return raiz;
 	}
@@ -117,7 +122,7 @@ public class AnalisadorSintatico {
 	private NóDeclaracao declaracao() throws ErroDeSintaxeException {
 		NóDeclaracao nó = new NóDeclaracao();
 		
-		System.out.print("declaracao( ");
+		//System.out.print("declaracao( ");
 		if (aceitaComEspacos(IDENTIFICADOR, nó)) {
 			esperadoComEspacos(IGUAL, null);
 			if (aceitaComEspacos(NUMERO, nó) ||
@@ -126,7 +131,7 @@ public class AnalisadorSintatico {
 			else throw new ErroDeSintaxeException(atual());
 			esperadoComEspacos(PULO_DE_LINHA, null);
 		} else throw new ErroDeSintaxeException(atual());
-		System.out.print(") ");
+		//System.out.print(") ");
 		
 		return nó;
 	}
@@ -135,7 +140,7 @@ public class AnalisadorSintatico {
 		if (raiz == null) raiz = new NóComandos();
 		
 		
-		System.out.print("comandos( ");
+		//System.out.print("comandos( ");
 		NóPosicao posicaoNó = posicao();
 		esperadoComEspacos(DOIS_PONTOS, null);
 		NóExpressao expressaoNó = expressao();
@@ -143,7 +148,7 @@ public class AnalisadorSintatico {
 		raiz.adicionar(new NóComando(posicaoNó, expressaoNó));
 		
 		if (aceita(PULO_DE_LINHA, null)) return comandos(raiz);
-		System.out.print(") ");
+		//System.out.print(") ");
 		
 		return raiz;
 	}
@@ -151,10 +156,10 @@ public class AnalisadorSintatico {
 	private NóPosicao posicao() throws ErroDeSintaxeException {
 		NóPosicao nó = new NóPosicao();
 		
-		System.out.print("posicao( ");
+		//System.out.print("posicao( ");
 		if (aceita(IDENTIFICADOR, nó, ESPACO, PULO_DE_LINHA)) ;
 		else { posicaoValor(nó); posicaoValor(nó); }
-		System.out.print(") ");
+		//System.out.print(") ");
 		
 		return nó;
 	}
@@ -169,9 +174,9 @@ public class AnalisadorSintatico {
 	private NóExpressao expressao() throws ErroDeSintaxeException {
 		NóExpressao nó = new NóExpressao();
 		
-		System.out.print("expressoes( ");
+		//System.out.print("expressoes( ");
 		esperadoComEspacos(NUMERO, nó);
-		System.out.print(") ");
+		//System.out.print(") ");
 		
 		return nó;
 	}

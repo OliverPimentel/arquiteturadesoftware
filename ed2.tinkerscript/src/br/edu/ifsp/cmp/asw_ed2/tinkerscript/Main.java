@@ -15,11 +15,16 @@ public class Main {
 		try {
 			AnalisadorLexico lexico = new AnalisadorLexico("exemplo2.tinkerscript");
 			lexico.analisar();
+			
+			System.out.println("\n\nLéxico");
 			InspetorDepuracao.padrao().visualizar(lexico);
 			
 			AnalisadorSintatico sintaxe = new AnalisadorSintatico(lexico);
 			ArvoreSintaticaAbstrata ast = sintaxe.analisar();
+			
+			System.out.println("\n\nÁrvore sintática abstrata (pre-ordem)");
 			InspetorDepuracao.padrao().visualizar(ast);
+			
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {
