@@ -7,6 +7,7 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexicoException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.AnalisadorSintatico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.InspetorDepuracao;
 
 public class Main {
@@ -17,7 +18,8 @@ public class Main {
 			InspetorDepuracao.padrao().visualizar(lexico);
 			
 			AnalisadorSintatico sintaxe = new AnalisadorSintatico(lexico);
-			sintaxe.analisar();
+			ArvoreSintaticaAbstrata ast = sintaxe.analisar();
+			InspetorDepuracao.padrao().visualizar(ast);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {

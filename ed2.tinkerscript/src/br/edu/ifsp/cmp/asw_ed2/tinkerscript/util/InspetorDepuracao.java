@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
 
 public class InspetorDepuracao {
 	public static final int LARGURA_TABULACAO = 8;
@@ -35,6 +37,18 @@ public class InspetorDepuracao {
 			envolver(simbolo.getLexema().replace("\n", "\\n"), '"');
 			
 			imprimirLinha();
+		}
+	}
+	
+	public void visualizar(ArvoreSintaticaAbstrata ast) {
+		imprimirPreOrdem(ast.getRaiz(), "");
+	}
+	
+	private void imprimirPreOrdem(NóAbstrato nó, String padding) {
+		if (nó != null) {
+			System.out.println(padding + nó.toString());
+			for (NóAbstrato filho : nó.getFilhos())
+				imprimirPreOrdem(filho, padding + "  ");
 		}
 	}
 	

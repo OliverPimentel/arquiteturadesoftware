@@ -9,7 +9,8 @@ import java.util.stream.Stream;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
-
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.*;
 
 public class AnalisadorSintatico {
 	private AnalisadorLexico lexico;
@@ -20,21 +21,21 @@ public class AnalisadorSintatico {
 		this.lexico = lexico;
 	}
 	
-	public void analisar() throws ErroDeSintaxeException {
+	public ArvoreSintaticaAbstrata analisar() throws ErroDeSintaxeException {
 		lexicoIterador = lexico.iterator();
 		proximoSimbolo();
-		programa();
+		return new ArvoreSintaticaAbstrata(programa());
 	}
 	
-	private boolean aceita(SimboloLexicoCategoria categoria) {
-		return aceita(categoria, new SimboloLexicoCategoria[] {});
+	private boolean aceita(SimboloLexicoCategoria categoria, NóAbstrato nó) {
+		return aceita(categoria, nó, new SimboloLexicoCategoria[] {});
 	}
 	
-	private boolean aceitaComEspacos(SimboloLexicoCategoria categoria) {
-		return aceita(categoria, ESPACO);
+	private boolean aceitaComEspacos(SimboloLexicoCategoria categoria, NóAbstrato nó) {
+		return aceita(categoria, nó, ESPACO);
 	}
 	
-	private boolean aceita(SimboloLexicoCategoria categoria, SimboloLexicoCategoria... ignorar) {
+	private boolean aceita(SimboloLexicoCategoria categoria, NóAbstrato nó, SimboloLexicoCategoria... ignorar) {
 		if (ignorar.length > 0)	{
 			while (atual != null && Stream.of(ignorar).anyMatch(atual.getCategoria()::equals)) {
 				System.out.print("[" + Stream.of(ignorar).map(Enum::name).collect(Collectors.joining("/")) + "] ");
@@ -43,78 +44,136 @@ public class AnalisadorSintatico {
 		}
 		
 		if (atual == null) { return false; }
-		if (atual.getCategoria().equals(categoria)) { System.out.print(categoria.name() + (categoria == PULO_DE_LINHA ? "\n" : " ")); proximoSimbolo(); return true; }
+		if (atual.getCategoria().equals(categoria)) { if (nó != null) nó.adicionar(criarNóDe(atual)); System.out.print(categoria.name() + (categoria == PULO_DE_LINHA ? "\n" : " ")); proximoSimbolo(); return true; }
 		return false;		
 	}
 	
-	private void esperado(SimboloLexicoCategoria categoria) throws ErroDeSintaxeException {
-		esperado(categoria, new SimboloLexicoCategoria[] {});
+
+	private void esperado(SimboloLexicoCategoria categoria, NóAbstrato nó) throws ErroDeSintaxeException {
+		esperado(categoria, nó, new SimboloLexicoCategoria[] {});
 	}
 	
-	private void esperadoComEspacos(SimboloLexicoCategoria categoria) throws ErroDeSintaxeException {
-		esperado(categoria, ESPACO);
+	private void esperadoComEspacos(SimboloLexicoCategoria categoria, NóAbstrato nó) throws ErroDeSintaxeException {
+		esperado(categoria, nó, ESPACO);
 	}
 	
-	private void esperado(SimboloLexicoCategoria categoria, SimboloLexicoCategoria... ignorar) throws ErroDeSintaxeException {
-		if (aceita(categoria, ignorar)) return;
+	private void esperado(SimboloLexicoCategoria categoria, NóAbstrato nó, SimboloLexicoCategoria... ignorar) throws ErroDeSintaxeException {
+		if (aceita(categoria, nó, ignorar)) return;
 		throw new ErroDeSintaxeException(atual(), "Esperava " + categoria.name());
 	}
 
+	private NóAbstrato criarNóDe(SimboloLexico simbolo) {
+		switch (simbolo.getCategoria()) {
+		case NUMERO:
+			return new NóNumero(simbolo);
+		case ASTERISCO:
+		case MENOR_QUE: 
+		case MAIOR_QUE:
+		case IGUAL:
+			return new NóOperador(simbolo);
+		case E:
+		case OU:
+			return new NóOperadorLogico(simbolo);
+		case VERDADEIRO:
+		case FALSO:
+			return new NóBooleano(simbolo);
+		case SE_INICIO:
+			return new NóCondicaoSe();
+		case NOTACAO_STRING:
+			return new NóString(simbolo);
+		case IDENTIFICADOR:
+			return new NóIdentificador(simbolo);
+		default: return null;
+		}
+	}
 	// Gramatica
-	private void programa() throws ErroDeSintaxeException {
+	private NóPrograma programa() throws ErroDeSintaxeException {
+		NóPrograma nó = new NóPrograma();
+		
 		System.out.print("programa( ");
-		esperado(PROGRAMA_INICIO, ESPACO, PULO_DE_LINHA);
-		esperado(DOIS_PONTOS);
-		esperadoComEspacos(PULO_DE_LINHA);
-		declaracoes();
-		comandos();
-		esperado(PROGRAMA_FIM);
+		esperado(PROGRAMA_INICIO, null, ESPACO, PULO_DE_LINHA);
+		esperado(DOIS_PONTOS, null);
+		esperadoComEspacos(PULO_DE_LINHA, null);
+		nó.adicionar(declaracoes(null));
+		nó.adicionar(comandos(null));
+		esperado(PROGRAMA_FIM, null);
 		System.out.print("\n)\n");
+		
+		return nó;
 	}
 	
-	private void declaracoes() throws ErroDeSintaxeException {
+	private NóDeclaracoes declaracoes(NóDeclaracoes raiz) throws ErroDeSintaxeException {
+		if (raiz == null) raiz = new NóDeclaracoes();
+		
 		System.out.print("declaracoes( ");
-		declaracao();
-		if (aceita(PULO_DE_LINHA));
-		else declaracoes();
+		raiz.adicionar(declaracao());
+		if (aceita(PULO_DE_LINHA, null));
+		else return declaracoes(raiz);
 		System.out.print(") ");
+		
+		return raiz;
 	}
 	
-	private void declaracao() throws ErroDeSintaxeException {
+	private NóDeclaracao declaracao() throws ErroDeSintaxeException {
+		NóDeclaracao nó = new NóDeclaracao();
+		
 		System.out.print("declaracao( ");
-		if (aceitaComEspacos(IDENTIFICADOR)) {
-			esperadoComEspacos(IGUAL);
-			if (!aceitaComEspacos(NUMERO)) esperadoComEspacos(IDENTIFICADOR);
-			esperadoComEspacos(PULO_DE_LINHA);
+		if (aceitaComEspacos(IDENTIFICADOR, nó)) {
+			esperadoComEspacos(IGUAL, null);
+			if (aceitaComEspacos(NUMERO, nó) ||
+					aceitaComEspacos(VERDADEIRO, nó) || aceitaComEspacos(FALSO, nó) ||
+					aceitaComEspacos(IDENTIFICADOR, nó)) ;
+			else throw new ErroDeSintaxeException(atual());
+			esperadoComEspacos(PULO_DE_LINHA, null);
 		} else throw new ErroDeSintaxeException(atual());
 		System.out.print(") ");
+		
+		return nó;
 	}
 	
-	private void comandos() throws ErroDeSintaxeException {
+	private NóComandos comandos(NóComandos raiz) throws ErroDeSintaxeException {
+		if (raiz == null) raiz = new NóComandos();
+		
+		
 		System.out.print("comandos( ");
-		posicao();
-		esperadoComEspacos(DOIS_PONTOS);
-		expressoes();
-		if (aceita(PULO_DE_LINHA)) comandos();
+		NóPosicao posicaoNó = posicao();
+		esperadoComEspacos(DOIS_PONTOS, null);
+		NóExpressao expressaoNó = expressao();
+		
+		raiz.adicionar(new NóComando(posicaoNó, expressaoNó));
+		
+		if (aceita(PULO_DE_LINHA, null)) return comandos(raiz);
 		System.out.print(") ");
+		
+		return raiz;
 	}
 	
-	private void posicao() throws ErroDeSintaxeException {
+	private NóPosicao posicao() throws ErroDeSintaxeException {
+		NóPosicao nó = new NóPosicao();
+		
 		System.out.print("posicao( ");
-		if (aceita(IDENTIFICADOR, ESPACO, PULO_DE_LINHA)) ;
-		else { posicaoValor(); posicaoValor(); }
+		if (aceita(IDENTIFICADOR, nó, ESPACO, PULO_DE_LINHA)) ;
+		else { posicaoValor(nó); posicaoValor(nó); }
 		System.out.print(") ");
+		
+		return nó;
 	}
 	
-	private void posicaoValor() throws ErroDeSintaxeException {
-		if (aceita(ASTERISCO, ESPACO, PULO_DE_LINHA) || aceita(NUMERO, ESPACO, PULO_DE_LINHA)) ;
+	private void posicaoValor(NóPosicao raiz) throws ErroDeSintaxeException {
+		if (aceita(ASTERISCO, null, ESPACO, PULO_DE_LINHA))
+			raiz.adicionar(new NóPosicaoQualquer());
+		else if (aceita(NUMERO, raiz, ESPACO, PULO_DE_LINHA)) ;
 		else throw new ErroDeSintaxeException(atual());
 	}
 	
-	private void expressoes() throws ErroDeSintaxeException {
+	private NóExpressao expressao() throws ErroDeSintaxeException {
+		NóExpressao nó = new NóExpressao();
+		
 		System.out.print("expressoes( ");
-		esperadoComEspacos(NUMERO);
+		esperadoComEspacos(NUMERO, nó);
 		System.out.print(") ");
+		
+		return nó;
 	}
 	
 	private void proximoSimbolo() {

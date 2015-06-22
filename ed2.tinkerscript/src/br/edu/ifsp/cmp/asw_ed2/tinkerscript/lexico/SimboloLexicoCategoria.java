@@ -13,7 +13,7 @@ public enum SimboloLexicoCategoria {
 	ASTERISCO("\\*"),
 	DOIS_PONTOS(":"),
 	
-	MENOS_QUE("<"),
+	MENOR_QUE("<"),
 	MAIOR_QUE(">"),
 	IGUAL("="),
 	

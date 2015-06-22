@@ -2,13 +2,13 @@ inicio:
   meu_contador = 10
   λ = 10
   macas = 1
-  urtiga? = false
+  urtiga? = não
   numero_de_passos = 0
 
-*  *  : 1
-*  *  : 2
-*  *  : 3
-10 5  : 2
-15 5  : 42
-AGUA  : 1
-URTIGA: 0
+*  *  : 23
+*  *  : 14
+*  *  : 96
+10 5  : 4835723
+15 5  : 732
+AGUA  : 4323
+URTIGA: 794
