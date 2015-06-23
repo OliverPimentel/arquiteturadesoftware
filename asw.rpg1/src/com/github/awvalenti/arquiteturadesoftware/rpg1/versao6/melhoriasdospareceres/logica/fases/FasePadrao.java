@@ -18,6 +18,7 @@ public class FasePadrao extends FaseAbstrata {
 	public void iniciar() {
 		super.iniciar();
 		ocultarPortal();
+		ultimaDirecao = null;
 	}
 	
 	public void ocultarPortal() {

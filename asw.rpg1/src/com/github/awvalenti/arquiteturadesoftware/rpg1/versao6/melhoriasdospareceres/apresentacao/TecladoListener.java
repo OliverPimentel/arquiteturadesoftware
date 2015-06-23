@@ -8,10 +8,6 @@ import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdosparec
 public class TecladoListener implements KeyListener, ControleJogoListener {
 	private ControleJogo controle;
 	
-	public TecladoListener(ControleJogo controle) {
-		this.controle = controle;
-	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
@@ -27,4 +23,9 @@ public class TecladoListener implements KeyListener, ControleJogoListener {
 	
 	@Override
 	public void keyReleased(KeyEvent e) { }
+
+	@Override
+	public void setControleJogo(ControleJogo controle) {
+		this.controle = controle;
+	}
 }

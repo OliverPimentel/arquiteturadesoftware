@@ -13,6 +13,8 @@ public class FabricaFases {
 	public Fase proximaFase() {
 		Elemento[][] elementos = fabricaElementosTabuleiros.obterNovosElementos();
 		if (elementos == null) return null;
-		return new FasePadrao(new Tabuleiro(elementos));
+		Fase fase = new FasePadrao(new Tabuleiro(elementos));
+		fase.setFabricaFases(this);
+		return fase;
 	}
 }
