@@ -2,9 +2,15 @@ package com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefin
 
 public class Fase {
 	protected Tabuleiro tabuleiro;
+	protected ComportamentoProgramavel comportamento;
 	
 	public Fase(Tabuleiro tabuleiro) {
 		this.tabuleiro = tabuleiro;
+	}
+	
+	public Fase(Tabuleiro tabuleiro, ComportamentoProgramavel comportamento) {
+		this(tabuleiro);
+		this.comportamento = comportamento;
 	}
 
 	public void setSaida(SaidaJogo saida) {
@@ -37,5 +43,13 @@ public class Fase {
 	
 	public void desativarUrtiga() {
 		tabuleiro.desativarUrtiga();
+	}
+	
+	public void abrirPortal() {
+		tabuleiro.reexibirPortal();
+	}
+	
+	public void fecharPortal() {
+		tabuleiro.ocultarPortal();
 	}
 }

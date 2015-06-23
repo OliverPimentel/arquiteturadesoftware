@@ -163,7 +163,7 @@ public class AnalisadorSintatico {
 	
 	private void posicaoValor(NóPosicao raiz) throws ErroDeSintaxeException {
 		if (aceita(ASTERISCO, null, ESPACO, PULO_DE_LINHA))
-			raiz.adicionar(new NóPosicaoQualquer());
+			raiz.adicionar(new NóPosicaoQualquer(atual()));
 		else if (aceita(NUMERO, raiz, ESPACO, PULO_DE_LINHA)) ;
 		else throw new ErroDeSintaxeException(atual());
 	}
@@ -358,7 +358,7 @@ public class AnalisadorSintatico {
 		case FALSO:
 			return new NóBooleano(simbolo);
 		case SE_INICIO:
-			return new NóCondicaoSe();
+			return new NóCondicao();
 		case NOTACAO_STRING:
 			return new NóString();
 		case IDENTIFICADOR:

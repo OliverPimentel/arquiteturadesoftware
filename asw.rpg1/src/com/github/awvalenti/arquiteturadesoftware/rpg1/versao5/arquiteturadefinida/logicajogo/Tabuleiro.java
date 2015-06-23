@@ -60,12 +60,12 @@ public class Tabuleiro {
 		}
 	}
 
-	private void ocultarPortal() {
+	public void ocultarPortal() {
 		posicaoDoPortalOculto = acharPosicaoDe(Elemento.PORTAL);
 		alterarElemento(posicaoDoPortalOculto, Elemento.GRAMA);
 	}
 
-	private void reexibirPortal() {
+	public void reexibirPortal() {
 		alterarElemento(posicaoDoPortalOculto, Elemento.PORTAL);
 	}
 

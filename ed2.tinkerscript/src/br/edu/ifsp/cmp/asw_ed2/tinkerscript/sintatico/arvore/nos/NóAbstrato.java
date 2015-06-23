@@ -35,4 +35,8 @@ public abstract class NóAbstrato {
 	public List<NóAbstrato> getFilhos() {
 		return filhos;
 	}
+	
+	public SimboloLexico getSimbolo() {
+		return simbolo;
+	}
 }

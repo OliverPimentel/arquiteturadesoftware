@@ -11,10 +11,15 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.InspetorDepuracao;
 
-public class Main {
-	public static void main(String[] args) {
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.ComportamentoProgramavel;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.Elemento;
+
+public class TinkerscriptComportamento implements ComportamentoProgramavel {
+	private AmbienteDeExecucao ambiente;
+	
+	public TinkerscriptComportamento(String caminhoArquivoFonte) {
 		try {
-			AnalisadorLexico lexico = new AnalisadorLexico("exemplo.tinkerscript");
+			AnalisadorLexico lexico = new AnalisadorLexico(caminhoArquivoFonte);
 			lexico.analisar();
 			
 			System.out.println("\n\nLéxico");
@@ -26,14 +31,21 @@ public class Main {
 			System.out.println("\n\nÁrvore sintática abstrata (pre-ordem)");
 			InspetorDepuracao.padrao().visualizar(ast);
 			
-//			System.out.println("\n\nRuntime");
-//			AmbienteDeExecucao ambiente = AmbienteDeExecucao.teste();
-//			ambiente.executar(ast);
-//			InspetorDepuracao.padrao().visualizar(ambiente);
+			System.out.println("\n\nRuntime");
+			this.ambiente = AmbienteDeExecucao.teste();
+			ambiente.executar(ast);
+			InspetorDepuracao.padrao().visualizar(ambiente);
+
+			System.out.println("Pronto!");
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {
 			System.err.println(e.getMessage());
 		}
+	}
+	
+	@Override
+	public void executar(int linha, int coluna, Elemento elemento) {
+		ambiente.executar(linha, coluna, elemento);
 	}
 }

@@ -4,8 +4,4 @@ public class NóPosicao extends NóAbstrato {
 	public void adicionar(NóIdentificador identificador) {
 		filhos.add(0, identificador);
 	}
-	
-	public void adicionar(NóNumero posicaoValor) {
-		
-	}
 }
