@@ -1,12 +1,10 @@
 package br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
@@ -24,9 +22,11 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPosicao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPosicaoQualquer;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPrograma;
 
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.Direcao;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.Elemento;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.Fase;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Elemento;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.FabricaFases;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Posicao;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.SaidaJogo;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.fases.Fase;
 
 public class AmbienteDeExecucao {
 	private Map<String, Object> tabelaDeSimbolos;
@@ -136,12 +136,13 @@ public class AmbienteDeExecucao {
 	}
 
 	public static AmbienteDeExecucao teste() {
-		return new AmbienteDeExecucao(new Fase(null) {
-			public int getNumeroColunas() { return 10; }
-			public int getNumeroLinhas() { return 10; }
-			public void ativarUrtiga() { System.out.println("urtiga ativada!"); }
-			public void desativarUrtiga() { System.out.println("urtiga desativada!"); }
-			public void fazerMovimento(Direcao d) { }
+		return new AmbienteDeExecucao(new Fase() {
+			public void setSaida(SaidaJogo saida) {}
+			public void setFabricaFases(FabricaFases fabrica) {}
+			public void iniciar() {}
+			public int getTabuleiroLinhas() { return 10; }
+			public int getTabuleiroColunas() { return 10; }
+			public Elemento getElementoEm(Posicao posicao) { return Elemento.GRAMA; }
 		});
 	}
 }

@@ -1,4 +1,4 @@
-package com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo;
+package com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica;
 
 public class Posicao {
 
@@ -46,6 +46,10 @@ public class Posicao {
 			return false;
 		}
 		return true;
+	}
+	
+	public String toString() {
+		return "[" + linha + ", " + coluna + "]";
 	}
 
 	public Posicao somar(Direcao d) {

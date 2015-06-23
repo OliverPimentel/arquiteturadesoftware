@@ -11,8 +11,8 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.InspetorDepuracao;
 
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.ComportamentoProgramavel;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao5.arquiteturadefinida.logicajogo.Elemento;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Elemento;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.fases.ComportamentoProgramavel;
 
 public class TinkerscriptComportamento implements ComportamentoProgramavel {
 	private AmbienteDeExecucao ambiente;
