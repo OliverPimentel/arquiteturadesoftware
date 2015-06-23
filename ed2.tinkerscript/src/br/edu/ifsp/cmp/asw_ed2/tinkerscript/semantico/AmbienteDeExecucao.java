@@ -119,8 +119,9 @@ public class AmbienteDeExecucao {
 		Iterator<NóAbstrato> iterador = posicao.getFilhos().iterator();
 
 		NóAbstrato posicaoValor = iterador.next();
-		if (posicaoValor instanceof NóIdentificador || posicaoValor instanceof NóPosicaoQualquer)
+		if (posicaoValor instanceof NóIdentificador || posicaoValor instanceof NóPosicaoQualquer) {
 			notacao = posicaoValor.getSimbolo().getLexema();
+		}
 		else if (posicaoValor instanceof NóNumero) 
 			notacao = ((NóNumero) posicaoValor).valor().toString();
 

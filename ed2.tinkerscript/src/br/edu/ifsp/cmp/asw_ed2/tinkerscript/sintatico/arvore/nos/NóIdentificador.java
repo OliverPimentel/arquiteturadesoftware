@@ -4,8 +4,6 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 
 
 public class NóIdentificador extends NóAbstrato {
-	private SimboloLexico simbolo;
-
 	public NóIdentificador(SimboloLexico simbolo) {
 		this.simbolo = simbolo;
 	}

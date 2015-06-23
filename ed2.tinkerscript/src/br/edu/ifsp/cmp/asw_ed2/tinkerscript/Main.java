@@ -26,10 +26,10 @@ public class Main {
 			System.out.println("\n\nÁrvore sintática abstrata (pre-ordem)");
 			InspetorDepuracao.padrao().visualizar(ast);
 			
-//			System.out.println("\n\nRuntime");
-//			AmbienteDeExecucao ambiente = AmbienteDeExecucao.teste();
-//			ambiente.executar(ast);
-//			InspetorDepuracao.padrao().visualizar(ambiente);
+			System.out.println("\n\nRuntime");
+			AmbienteDeExecucao ambiente = AmbienteDeExecucao.teste();
+			ambiente.executar(ast);
+			InspetorDepuracao.padrao().visualizar(ambiente);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (AnalisadorLexicoException | ErroDeSintaxeException e) {
