@@ -18,6 +18,7 @@ public class AnalisadorSintatico {
 	
 	private AnalisadorLexico lexico;
 	private ListIterator<SimboloLexico> lexicoIterador;
+	private SimboloLexico lido;
 	private SimboloLexico atual;
 	private Logger logger;
 	
@@ -163,7 +164,7 @@ public class AnalisadorSintatico {
 	
 	private void posicaoValor(NóPosicao raiz) throws ErroDeSintaxeException {
 		if (aceita(ASTERISCO, null, ESPACO, PULO_DE_LINHA))
-			raiz.adicionar(new NóPosicaoQualquer(atual()));
+			raiz.adicionar(new NóPosicaoQualquer(lido));
 		else if (aceita(NUMERO, raiz, ESPACO, PULO_DE_LINHA)) ;
 		else throw new ErroDeSintaxeException(atual());
 	}
@@ -184,8 +185,8 @@ public class AnalisadorSintatico {
 		logger.debug("expressao:");  logger.aninhar();
 
 		NóAbstrato resultado; 
-		if ((resultado = condicao()) != null)        nó.adicionar(resultado);
-		else if ((resultado = exprAtomo(false)) != null)  nó.adicionar(resultado);
+		if ((resultado = condicao()) != null) nó.adicionar(resultado);
+		else if ((resultado = exprAtomo(false)) != null) nó.adicionar(resultado);
 		//else throw new RuntimeErrorException("???");
 		
 		logger.desaninhar();
@@ -284,6 +285,7 @@ public class AnalisadorSintatico {
 	}
 	
 	private void proximoSimbolo() {
+		lido = atual;
 		if (!lexicoIterador.hasNext()) atual = null;
 		else                  		   atual = lexicoIterador.next();
 	}

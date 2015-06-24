@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexicoException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.AmbienteDeExecucao;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.FuncoesPadrao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.AnalisadorSintatico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
@@ -16,7 +17,7 @@ import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdosparec
 public class TinkerscriptComportamento implements ComportamentoProgramavel {
 	private AmbienteDeExecucao ambiente;
 	
-	public TinkerscriptComportamento(String caminhoArquivoFonte) {
+	public TinkerscriptComportamento(String caminhoArquivoFonte, FuncoesPadrao builtin) {
 		try {
 			AnalisadorLexico lexico = new AnalisadorLexico(caminhoArquivoFonte);
 			lexico.analisar();
@@ -31,7 +32,7 @@ public class TinkerscriptComportamento implements ComportamentoProgramavel {
 			InspetorDepuracao.padrao().visualizar(ast);
 			
 			System.out.println("\n\nRuntime");
-			this.ambiente = new AmbienteDeExecucao();
+			this.ambiente = new AmbienteDeExecucao(builtin);
 			ambiente.executar(ast);
 			InspetorDepuracao.padrao().visualizar(ambiente);
 

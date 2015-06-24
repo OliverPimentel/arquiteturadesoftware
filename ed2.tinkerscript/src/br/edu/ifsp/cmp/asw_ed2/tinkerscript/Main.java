@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.AnalisadorLexicoException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.AmbienteDeExecucao;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.FuncoesPadrao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.AnalisadorSintatico;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.ErroDeSintaxeException;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
@@ -27,7 +28,13 @@ public class Main {
 			InspetorDepuracao.padrao().visualizar(ast);
 			
 			System.out.println("\n\nRuntime");
-			AmbienteDeExecucao ambiente = AmbienteDeExecucao.teste();
+			AmbienteDeExecucao ambiente = new AmbienteDeExecucao(new FuncoesPadrao() {
+				@Override
+				public void executar(String nome, Object... argumentos) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 			ambiente.executar(ast);
 			InspetorDepuracao.padrao().visualizar(ambiente);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {

@@ -7,7 +7,7 @@ public class NóBooleano extends NóAbstrato {
 	public NóBooleano(SimboloLexico simbolo) {
 		super(simbolo);
 	}
-	
+
 	public boolean valor() {
 		if (simbolo.getCategoria() == SimboloLexicoCategoria.VERDADEIRO)
 			return true;

@@ -5,11 +5,5 @@ inicio:
   urtiga? = não
   numero_de_passos = 0
 
-*  *  : se 2 < 1 entao mensagem("nunca imprime")
 1  1  : 2 + 2 * 3 / 8, 2
-*  *  : numero_de_passos += 1
-*  *  : meu_contador = 1
-10 5  : fechar_portal()
-15 5  : se meu_contador < 0 entao abrir_portal()
-AGUA  : vida -= 1, mover_x(2)
-URTIGA: urtiga = true
+AGUA  : mover_2_2()

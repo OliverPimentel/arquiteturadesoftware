@@ -2,6 +2,7 @@ package br.edu.ifsp.cmp.asw_ed2.tinkerscript.util;
 
 import static java.util.stream.Collectors.maxBy;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
@@ -11,6 +12,7 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexicoCategoria;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico.AmbienteDeExecucao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóExpressoes;
 
 public class InspetorDepuracao {
 	public static final int LARGURA_TABULACAO = 8;
@@ -45,6 +47,10 @@ public class InspetorDepuracao {
 	public void visualizar(AmbienteDeExecucao ambiente) {
 		for (Entry<String,Object> entrada : ambiente.getTabelaDeSimbolos().entrySet()) {
 			System.out.println("-> " + entrada.getKey() + "\n" + entrada.getValue() + "\n");
+		}
+		System.out.println("Comportamentos:");
+		for (Entry<String,List<NóExpressoes>> entrada : ambiente.getComportamentos().entrySet()) {
+			System.out.println("--" + entrada.getKey() + "\t|\t" + entrada.getValue().size());
 		}
 	}
 	

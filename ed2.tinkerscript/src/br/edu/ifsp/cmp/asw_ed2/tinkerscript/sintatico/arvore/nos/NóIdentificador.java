@@ -2,12 +2,11 @@ package br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.lexico.SimboloLexico;
 
-
 public class NóIdentificador extends NóAbstrato {
 	public NóIdentificador(SimboloLexico simbolo) {
-		this.simbolo = simbolo;
+		super(simbolo);
 	}
-	
+
 	public String identificador() {
 		return simbolo.getLexema();
 	}

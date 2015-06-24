@@ -1,14 +1,18 @@
 package br.edu.ifsp.cmp.asw_ed2.tinkerscript.semantico;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbstrata;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAbstrato;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóAtribuicao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóBooleano;
+import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóChamadaDeFuncao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóComando;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóComandos;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóCondicao;
@@ -22,32 +26,35 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPosicao;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPosicaoQualquer;
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.nos.NóPrograma;
 
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Elemento;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.FabricaFases;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Posicao;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.SaidaJogo;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.fases.Fase;
-
 public class AmbienteDeExecucao {
+	private FuncoesPadrao builtin;
 	private Map<String, Object> tabelaDeSimbolos;
 	private Map<String, List<NóExpressoes>> comportamentos;
+	private Stack<Object> pilha;
 	
-	public AmbienteDeExecucao(Fase faseAtual) {
+	public AmbienteDeExecucao(FuncoesPadrao builtin) {
+		this.builtin = builtin;
+		
 		tabelaDeSimbolos = new HashMap<>();
 		comportamentos = new HashMap<>();
+		pilha = new Stack<>();
 	}
 	
 	public void executar(ArvoreSintaticaAbstrata arvore) {
 		visitar(arvore.getRaiz());
 	}
 	
-	public void executar(int linha, int coluna, Elemento elemento) {
+	public void executar(int linha, int coluna, String elemento) {
 		for (NóExpressoes expressoes : expressoes(linha, coluna, elemento))
 			visitar(expressoes);
 	}
 
 	public Map<String, Object> getTabelaDeSimbolos() {
 		return tabelaDeSimbolos;
+	}
+	
+	public Map<String, List<NóExpressoes>> getComportamentos() {
+		return comportamentos;
 	}
 	
 	private void visitar(NóPrograma programa) {
@@ -64,9 +71,11 @@ public class AmbienteDeExecucao {
 		NóAbstrato valor = no.filho(1);
 		
 		if (valor instanceof NóNumero) {
-			tabelaDeSimbolos.put(((NóIdentificador) no.filho(0)).identificador(), ((NóNumero) no.filho(1)).valor());
+			visitar((NóNumero) no.filho(1));
+			tabelaDeSimbolos.put(((NóIdentificador) no.filho(0)).identificador(), (Integer) pilha.pop());
 		} else if (valor instanceof NóBooleano) {
-			tabelaDeSimbolos.put(((NóIdentificador) no.filho(0)).identificador(), ((NóBooleano) no.filho(1)).valor());
+			visitar((NóBooleano) no.filho(1));
+			tabelaDeSimbolos.put(((NóIdentificador) no.filho(0)).identificador(), (Boolean) pilha.pop());
 		} else {
 			throw new RuntimeException("Não implementado.");
 		}
@@ -93,22 +102,48 @@ public class AmbienteDeExecucao {
 	}
 	
 	private void visitar(NóExpressoes expressoes) {
-		
+		for (NóAbstrato cmd : expressoes.getFilhos()) {
+			visitar((NóExpressao) cmd);
+		}
 	}
 	
 	private void visitar(NóExpressao expressao) {
-		for (NóAbstrato sub : expressao.getFilhos()) {
-			if (sub instanceof NóCondicao) {}
+		for (NóAbstrato expr : expressao.getFilhos()) {
+			if (expr instanceof NóCondicao) {
+				//visitar((NóExprAtomo) expr.filho(0));
+			} else {
+				for (NóAbstrato terminal : expr.getFilhos()) {
+					if (terminal instanceof NóAtribuicao) visitar((NóAtribuicao) terminal);
+					else if (terminal instanceof NóChamadaDeFuncao) visitar((NóChamadaDeFuncao) terminal);
+				}
+			}
 		}
 	}
 
-	private List<NóExpressoes> expressoes(int linha, int coluna, Elemento elemento) {
+	private void visitar(NóChamadaDeFuncao terminal) {
+		String nomeFuncao = terminal.filho(0).getSimbolo().getLexema();
+		builtin.executar(nomeFuncao);
+	}
+
+	private void visitar(NóAtribuicao terminal) {
+	}
+
+	private void visitar(NóNumero numero) {
+		pilha.push(numero.valor());
+	}
+
+	private void visitar(NóBooleano filho) {
+		pilha.push(filho.valor());
+	}
+
+	private List<NóExpressoes> expressoes(int linha, int coluna, String elemento) {
+		List<NóExpressoes> vazia = Arrays.asList(new NóExpressoes[]{});
 		List<NóExpressoes> cmds = new ArrayList<>();
-		cmds.addAll(comportamentos.get("* *"));
-		cmds.addAll(comportamentos.get("* " + coluna));
-		cmds.addAll(comportamentos.get(linha + " *" + coluna));
-		cmds.addAll(comportamentos.get(elemento.name()));
-		cmds.addAll(comportamentos.get(linha + " " + coluna));
+		cmds.addAll(comportamentos.getOrDefault("* *", vazia));
+		cmds.addAll(comportamentos.getOrDefault("* " + coluna, vazia));
+		cmds.addAll(comportamentos.getOrDefault(linha + " *" + coluna, vazia));
+		cmds.addAll(comportamentos.getOrDefault(elemento, vazia));
+		cmds.addAll(comportamentos.getOrDefault(linha + " " + coluna, vazia));
 		
 		return cmds;
 		
@@ -121,29 +156,18 @@ public class AmbienteDeExecucao {
 		NóAbstrato posicaoValor = iterador.next();
 		if (posicaoValor instanceof NóIdentificador || posicaoValor instanceof NóPosicaoQualquer) {
 			notacao = posicaoValor.getSimbolo().getLexema();
-		}
-		else if (posicaoValor instanceof NóNumero) 
+		} else if (posicaoValor instanceof NóNumero) {
 			notacao = ((NóNumero) posicaoValor).valor().toString();
+		}
 
 		if (iterador.hasNext()) {
 			posicaoValor = iterador.next();
 			if (posicaoValor instanceof NóIdentificador || posicaoValor instanceof NóPosicaoQualquer)
-				notacao = posicaoValor.getSimbolo().getLexema();
+				notacao += " " + posicaoValor.getSimbolo().getLexema();
 			else if (posicaoValor instanceof NóNumero) 
-				notacao = ((NóNumero) posicaoValor).valor().toString();
+				notacao += " " + ((NóNumero) posicaoValor).valor().toString();
 		}
 
 		return notacao;
-	}
-
-	public static AmbienteDeExecucao teste() {
-		return new AmbienteDeExecucao(new Fase() {
-			public void setSaida(SaidaJogo saida) {}
-			public void setFabricaFases(FabricaFases fabrica) {}
-			public void iniciar() {}
-			public int getTabuleiroLinhas() { return 10; }
-			public int getTabuleiroColunas() { return 10; }
-			public Elemento getElementoEm(Posicao posicao) { return Elemento.GRAMA; }
-		});
 	}
 }
