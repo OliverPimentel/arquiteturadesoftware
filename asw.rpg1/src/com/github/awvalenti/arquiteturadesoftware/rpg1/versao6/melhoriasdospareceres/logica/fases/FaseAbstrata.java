@@ -7,6 +7,7 @@ import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdosparec
 import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Posicao;
 import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.SaidaJogo;
 import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Tabuleiro;
+import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.comportamentos.ComportamentoProgramavel;
 
 public abstract class FaseAbstrata implements Fase, ControleJogo {
 	protected Tabuleiro tabuleiro;

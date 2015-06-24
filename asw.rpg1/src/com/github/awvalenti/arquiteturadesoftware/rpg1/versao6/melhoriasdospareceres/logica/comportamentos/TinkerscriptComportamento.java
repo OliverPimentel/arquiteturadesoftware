@@ -1,4 +1,4 @@
-package br.edu.ifsp.cmp.asw_ed2.tinkerscript;
+package com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.comportamentos;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -12,7 +12,6 @@ import br.edu.ifsp.cmp.asw_ed2.tinkerscript.sintatico.arvore.ArvoreSintaticaAbst
 import br.edu.ifsp.cmp.asw_ed2.tinkerscript.util.InspetorDepuracao;
 
 import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.Elemento;
-import com.github.awvalenti.arquiteturadesoftware.rpg1.versao6.melhoriasdospareceres.logica.fases.ComportamentoProgramavel;
 
 public class TinkerscriptComportamento implements ComportamentoProgramavel {
 	private AmbienteDeExecucao ambiente;
@@ -32,7 +31,7 @@ public class TinkerscriptComportamento implements ComportamentoProgramavel {
 			InspetorDepuracao.padrao().visualizar(ast);
 			
 			System.out.println("\n\nRuntime");
-			this.ambiente = AmbienteDeExecucao.teste();
+			this.ambiente = new AmbienteDeExecucao();
 			ambiente.executar(ast);
 			InspetorDepuracao.padrao().visualizar(ambiente);
 
@@ -46,6 +45,6 @@ public class TinkerscriptComportamento implements ComportamentoProgramavel {
 	
 	@Override
 	public void executar(int linha, int coluna, Elemento elemento) {
-		ambiente.executar(linha, coluna, elemento);
+		ambiente.executar(linha, coluna, elemento.name());
 	}
 }
